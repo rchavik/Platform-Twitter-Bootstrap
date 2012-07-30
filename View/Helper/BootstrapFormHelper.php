@@ -30,14 +30,44 @@ class BootstrapFormHelper extends FormHelper {
 				)
 			),
 			'help'		=> '',
-			'required'	=> false
+			'required'	=> false,
+			'append' => array(),
+			'prepend' => array(),
 		);
 
-		$options = array_merge($defaults, $options);
+		$options = array_merge($defaults, $this->_inputDefaults, $options);
+
+		if (isset($options['help'])) {
+			$options['after'] =  '<p class="help-block">' . $options['help'] . '</p>' . $options['after'];
+			unset($options['help']);
+		}
 
 		if (isset($options['actions'])) {
 			$options['after'] .= '<div class="actions">' . join("\n", $options['actions']) . '</div>';
 			unset($options['actions']);
+		}
+
+		if(!empty($options['prepend']) && empty($options['append'])) {
+			$prepend = is_array($options['prepend']) ? join("\n", $options['prepend']) : '<span class="add-on">' . $options['prepend'] . '</span>';
+			$options['between'] .= '<div class="input-prepend">' . $prepend;
+			$options['after'] = '</div>' . $options['after'];
+			unset($options['prepend']);
+		}
+		elseif(!empty($options['append']) && empty($options['prepend'])) {
+			$append = is_array($options['append']) ? join("\n", $options['append']) : '<span class="add-on">' . $options['append'] . '</span>';
+			$options['between'] .= '<div class="input-append">';
+			$options['after'] = $append . '</div>' . $options['after'];
+			unset($options['append']);
+		}
+		elseif(!empty($options['prepend']) && !empty($options['append'])) {
+			$prepend = is_array($options['prepend']) ? join("\n", $options['prepend']) : '<span class="add-on">' . $options['prepend'] . '</span>';
+			$append = is_array($options['append']) ? join("\n", $options['append']) : '<span class="add-on">' . $options['append'] . '</span>';
+
+			$options['between'] .= '<div class="input-append input-prepend">' . $prepend;
+			$options['after'] = $append . '</div>' . $options['after'];
+			
+			unset($options['prepend']);
+			unset($options['append']);
 		}
 
 		return parent::input($fieldName, $options);
@@ -46,16 +76,7 @@ class BootstrapFormHelper extends FormHelper {
 	public function label($fieldName = null, $text = null, $options = array()) {
 		$options = $this->addClass($options, 'control-label');
 
-		$s = parent::label($fieldName, $text, $options);
-		if (!empty($this->_labelHelpText)) {
-			return sprintf('<div class="descr">%s<p>%s</p></div>', $s, $this->_labelHelpText);
-		}
-
-		if (!empty($options['help'])) {
-			return sprintf('<div class="descr">%s<p>%s</p></div>', $s, $options['help']);
-		}
-
-		return sprintf('<div class="descr">%s</div>', $s);
+		return parent::label($fieldName, $text, $options);
 	}
 
 
