@@ -41,7 +41,7 @@ class BootstrapFormHelper extends FormHelper {
 			$options['between'] = $options['after'] = '';
 		}
 
-		if (isset($options['help'])) {
+		if (isset($options['help']) && $options['help']) {
 			$options['after'] =  '<p class="help-block">' . $options['help'] . '</p>' . $options['after'];
 			unset($options['help']);
 		}
