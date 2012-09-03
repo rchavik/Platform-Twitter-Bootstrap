@@ -187,4 +187,20 @@ class BootstrapFormHelper extends FormHelper {
 
 		return parent::submit($label, $options);
 	}
+
+	/**
+	 * Button
+	 *
+	 * @param string $label
+	 *
+	 * @return string
+	 */
+	public function button($title, $options = array()) {
+		$defaults = array(
+			'class' => 'btn primary'
+		);
+		$options = array_merge($defaults, $options);
+		return parent::button($title, $options);
+	}
+
 }
