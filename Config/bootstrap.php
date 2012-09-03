@@ -7,6 +7,12 @@ Croogo::hookHelper('*', array(
 ));
 
 Croogo::hookHelper('*', array(
+	'Form' => array(
+		'className' => 'TwitterBootstrap.BootstrapForm',
+	),
+));
+
+Croogo::hookHelper('*', array(
 	'Paginator' => array(
 		'className' => 'TwitterBootstrap.BootstrapPaginator',
 	),
